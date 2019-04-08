@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-SQLCIPHER_VERSION = v3.2.0
+SQLCIPHER_VERSION = v4.0.1
 SQLCIPHER_SITE = $(call github,sqlcipher,sqlcipher,$(SQLCIPHER_VERSION))
 SQLCIPHER_LICENSE = BSD-3-Clause
 SQLCIPHER_LICENSE_FILES = LICENSE
@@ -31,6 +31,12 @@ SQLCIPHER_DEPENDENCIES += ncurses readline
 SQLCIPHER_CONF_OPTS += --with-readline-inc="-I$(STAGING_DIR)/usr/include"
 else
 SQLCIPHER_CONF_OPTS += --disable-readline
+endif
+
+ifeq ($(BR2_STATIC_LIBS),y)
+SQLCIPHER_CONF_OPTS += --disable-load-extension
+else
+SQLCIPHER_CONF_OPTS += --enable-load-extension
 endif
 
 $(eval $(autotools-package))
