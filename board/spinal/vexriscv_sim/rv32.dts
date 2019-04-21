@@ -3,8 +3,8 @@
 / {
 	#address-cells = <0x2>;
 	#size-cells = <0x2>;
-	compatible = "sifive,fu540g", "sifive,fu500";
-	model = "sifive,hifive-unleashed-a00";
+	compatible = "spinal,vexriscv";
+	model = "spinal,vexriscv_sim";
 
 
 	chosen {
@@ -20,7 +20,7 @@
 
 		cpu@0 {
 			clock-frequency = <0x0>;
-			compatible = "sifive,rocket0", "riscv";
+			compatible = "spinal,vexriscv", "riscv";
 			d-cache-block-size = <0x40>;
 			d-cache-sets = <0x40>;
 			d-cache-size = <0x8000>;
@@ -50,7 +50,7 @@
 		interrupt-controller {
 			#address-cells = <0x0>;
 			#interrupt-cells = <0x1>;
-			compatible = "riscv,vex";
+			compatible = "riscv,vexriscv";
 			interrupt-controller;
 			interrupts-extended = <0x2 0xb>;
 			reg = <0xe000000 0x4000000>;
@@ -67,7 +67,7 @@
 	soc {
 		#address-cells = <0x2>;
 		#size-cells = <0x2>;
-		compatible = "SiFive,FU540G-soc", "fu500-soc", "sifive-soc", "simple-bus";
+		compatible = "spinal,vexriscv-sim";
 		ranges;
 
 
