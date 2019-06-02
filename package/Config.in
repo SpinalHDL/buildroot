@@ -1793,6 +1793,7 @@ menu "Mail"
 endmenu
 
 menu "Miscellaneous"
+	source "package/hello/Config.in"
 	source "package/aespipe/Config.in"
 	source "package/bc/Config.in"
 	source "package/clamav/Config.in"
