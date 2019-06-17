@@ -60,7 +60,7 @@
             reg = <0x020000 0x1000>;
                    
             spidev@0 {
-                compatible = "spidev";
+                compatible = "rohm,dh2228fv"; //spidev
                 spi-max-frequency = <100000>;
                 reg = <0>;
             };    
@@ -70,6 +70,18 @@
                 voltage-ranges = <3300 3300>;
                 spi-max-frequency = <5000000>;
             };
+        };
+
+        gpioA: gpio@0 {
+	        compatible = "spinal-lib,gpio-1.0";
+	        interrupt-parent = <&plic>;
+	        ngpio = <8>;
+	        interrupts = <4 5>;
+	        reg = <0x000000 0x1000>;
+	        gpio-controller;
+	        #gpio-cells = <2>;
+	        interrupt-controller;
+	        #interrupt-cells = <2>;
         };
     };
 
