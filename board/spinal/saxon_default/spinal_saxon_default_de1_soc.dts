@@ -60,20 +60,21 @@
             reg = <0x020000 0x1000>;
             cmd_fifo_depth = <256>;
             rsp_fifo_depth = <256>;
-            cs-gpios = <&gpioA 4 0>, <&gpioA 5 0>;
+            cs-gpios = <&gpioA 8 0>, <&gpioA 9 0>;
 
                    
-            spidev@0 {
-                compatible = "rohm,dh2228fv"; //spidev
-                spi-max-frequency = <50000000>;
-                reg = <0>;
-            };    
-            mmc-slot@1 {
+
+            mmc-slot@0 {
                 compatible = "mmc-spi-slot";
-                reg = <1>;
+                reg = <0>;
                 voltage-ranges = <3300 3300>;
                 spi-max-frequency = <25000000>;
             };
+            spidev@1 {
+                compatible = "rohm,dh2228fv"; //spidev
+                spi-max-frequency = <1000000>;
+                reg = <1>;
+            }; 
         };
 
 
@@ -84,7 +85,7 @@
             reg = <0x021000 0x1000>;
             cmd_fifo_depth = <256>;
             rsp_fifo_depth = <256>;
-            cs-gpios = <&gpioA 6 0>, <&gpioA 7 0>;
+            cs-gpios = <&gpioA 4 0>, <&gpioA 5 0>, <&gpioA 6 0>, <&gpioA 7 0>;
 
                    
             spidev@0 {
@@ -96,13 +97,23 @@
                 compatible = "rohm,dh2228fv"; //spidev
                 spi-max-frequency = <1000000>;
                 reg = <1>;
+            };     
+            spidev@2 {
+                compatible = "rohm,dh2228fv"; //spidev
+                spi-max-frequency = <1000000>;
+                reg = <2>;
+            };     
+            spidev@3 {
+                compatible = "rohm,dh2228fv"; //spidev
+                spi-max-frequency = <1000000>;
+                reg = <3>;
             };    
         };
 
         gpioA: gpio@0 {
 	        compatible = "spinal-lib,gpio-1.0";
 	        interrupt-parent = <&plic>;
-	        ngpio = <16>;
+	        ngpio = <24>;
 	        interrupts = <4 5 6 7>;
 	        reg = <0x000000 0x1000>;
 	        gpio-controller;
@@ -118,8 +129,8 @@
 		compatible = "gpio-leds";
 		led0 {
 			label = "LED0";
+			gpios = <&gpioA 16 0>;
 			linux,default-trigger = "mmc0";
-			gpios = <&gpioA 8 0>;
 		};
 	};
 };
