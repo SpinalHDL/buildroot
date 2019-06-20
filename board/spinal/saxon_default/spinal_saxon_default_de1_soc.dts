@@ -1,4 +1,10 @@
+
+
 /dts-v1/;
+//include/ "dt-bindings/interrupt-controller/irq.h"
+//include/ "dt-bindings/gpio/gpio.h"
+
+
 
 / {
     #address-cells = <0x1>;
@@ -52,6 +58,18 @@
             riscv,ndev = <32>;
         };
 
+        gpioA: gpio@0 {
+	        compatible = "spinal-lib,gpio-1.0";
+	        interrupt-parent = <&plic>;
+	        ngpio = <24>;
+	        interrupts = <4 5 6 7>;
+	        reg = <0x000000 0x1000>;
+	        gpio-controller;
+	        #gpio-cells = <2>;
+	        interrupt-controller;
+	        #interrupt-cells = <2>;
+        };
+
 
         spiA: spi@20000 {
             compatible = "spinal-lib,spi-1.0";
@@ -60,7 +78,7 @@
             reg = <0x020000 0x1000>;
             cmd_fifo_depth = <256>;
             rsp_fifo_depth = <256>;
-            cs-gpios = <&gpioA 8 0>, <&gpioA 9 0>;
+            cs-gpios = <&gpioA 8 0>;
 
                    
 
@@ -70,11 +88,6 @@
                 voltage-ranges = <3300 3300>;
                 spi-max-frequency = <25000000>;
             };
-            spidev@1 {
-                compatible = "rohm,dh2228fv"; //spidev
-                spi-max-frequency = <1000000>;
-                reg = <1>;
-            }; 
         };
 
 
@@ -88,21 +101,38 @@
             cs-gpios = <&gpioA 4 0>, <&gpioA 5 0>, <&gpioA 6 0>, <&gpioA 7 0>;
 
                    
-            spidev@0 {
+            enc28j60: ethernet@0 {
+                compatible = "microchip,enc28j60";
+                reg = <0>;
+                interrupt-parent = <&gpioA>;
+                interrupts = <0 2>; //IRQ_TYPE_EDGE_FALLING
+                spi-max-frequency = <6000000>;
+            };   
+          /*  spidev@0 {
                 compatible = "rohm,dh2228fv"; //spidev
                 spi-max-frequency = <1000000>;
                 reg = <0>;
-            };    
-            spidev@1 {
+            }; */
+
+            w5500: ethernet@1 {
+                compatible = "wiznet,w5500";
+                reg = <1>; 
+                interrupt-parent = <&gpioA>; 
+                interrupts = <1 2>; 
+                spi-max-frequency = <10000000>;
+            };  
+            /*spidev@1 {
                 compatible = "rohm,dh2228fv"; //spidev
                 spi-max-frequency = <1000000>;
                 reg = <1>;
-            };     
+            };   */  
+
             spidev@2 {
                 compatible = "rohm,dh2228fv"; //spidev
                 spi-max-frequency = <1000000>;
                 reg = <2>;
-            };     
+            };    
+ 
             spidev@3 {
                 compatible = "rohm,dh2228fv"; //spidev
                 spi-max-frequency = <1000000>;
@@ -110,17 +140,6 @@
             };    
         };
 
-        gpioA: gpio@0 {
-	        compatible = "spinal-lib,gpio-1.0";
-	        interrupt-parent = <&plic>;
-	        ngpio = <24>;
-	        interrupts = <4 5 6 7>;
-	        reg = <0x000000 0x1000>;
-	        gpio-controller;
-	        #gpio-cells = <2>;
-	        interrupt-controller;
-	        #interrupt-cells = <1>;
-        };
 
 
     };
