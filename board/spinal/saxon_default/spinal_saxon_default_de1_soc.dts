@@ -13,7 +13,7 @@
     model = "spinal,vexriscv_sim";
 
     chosen {
-        bootargs = "rootwait console=hvc0 root=/dev/ram0 init=/sbin/init swiotlb=32 loglevel=7";
+        bootargs = "rootwait console=hvc0 root=/dev/ram0 init=/sbin/init swiotlb=32"; // loglevel=7
         linux,initrd-start = <0x80C00000>;
         linux,initrd-end =   <0x82000000>; 
     };
@@ -100,7 +100,7 @@
             cs-gpios = <&gpioA 4 0>, <&gpioA 5 0>, <&gpioA 6 0>, <&gpioA 7 0>;
 
                    
-
+/*
             enc28j60: ethernet@0 {
                 compatible = "microchip,enc28j60";
                 reg = <0>;
@@ -116,7 +116,16 @@
                 interrupts = <1 2>; 
                 spi-max-frequency = <2000000>;
             }; 
-
+*/
+			wilc_spi@2 {
+				compatible = "microchip,wilc1000";
+				spi-max-frequency = <10000000>;
+				reg = <2>;
+				irq-gpios = <&gpioA 2 0>;
+				reset-gpios = <&gpioA 14 0>;
+				chip_en-gpios = <&gpioA 15 0>;
+				status = "okay";
+			};
 /*
 			wilc_spi@2 {
 				compatible = "microchip,wilc1000-spi";
@@ -126,7 +135,7 @@
 				status = "okay";
 			};
 */
-/*
+
             spidev@0 {
                 compatible = "rohm,dh2228fv"; //spidev
                 spi-max-frequency = <1000000>;
@@ -138,13 +147,13 @@
                 spi-max-frequency = <1000000>;
                 reg = <1>;
             };     
-*/
+/*
             spidev@2 {
                 compatible = "rohm,dh2228fv"; //spidev
                 spi-max-frequency = <1000000>;
                 reg = <2>;
             };    
- 
+ */
             spidev@3 {
                 compatible = "rohm,dh2228fv"; //spidev
                 spi-max-frequency = <1000000>;
@@ -152,7 +161,7 @@
             };    
         };
 
-		/*spi {
+		spi {
 			compatible = "spi-gpio";
 			#address-cells = <0x1>;
 			ranges;
@@ -162,15 +171,24 @@
 			mosi-gpios = <&gpioA 12 0>;
 			cs-gpios = <&gpioA 11 0>;
 			num-chipselects = <1>;
-
+/*
 			wilc_spi@0 {
-				compatible = "microchip,wilc1000-spi";
+				compatible = "microchip,wilc1000";
+				spi-max-frequency = <4000000>;
+				reg = <0>;
+				irq-gpios = <&gpioA 2 0>;
+				reset-gpios = <&gpioA 14 0>;
+				chip_en-gpios = <&gpioA 15 0>;
+				status = "okay";
+			};*/
+			/*wilc_spi@0 {
+				compatible = "microchip,wilc1000";
 				spi-max-frequency = <4000000>;
 				reg = <0>;
 				irq-gpios = <&gpioA 2 0>;
 				status = "okay";
-			};
-		};*/
+			};*/
+		};
     };
 
 	leds: leds {
