@@ -86,7 +86,7 @@
                 compatible = "mmc-spi-slot";
                 reg = <0>;
                 voltage-ranges = <3300 3300>;
-                spi-max-frequency = <25000000>;
+                spi-max-frequency = <5000000>;
             };
         };
 
