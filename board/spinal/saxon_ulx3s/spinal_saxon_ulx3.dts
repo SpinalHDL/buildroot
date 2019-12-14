@@ -47,7 +47,7 @@
 		ranges;
 
 		machineMode: sbi@81FF0000 {
-			reg = <0x81FF0000 0x10000>;
+			reg = <0x80800000 0x10000>;
 		};
 	};
 
@@ -78,6 +78,13 @@
 	        #interrupt-cells = <2>;
         };
 
+        uartB: tty@11000 {
+                compatible = "spinal-lib,uart-1.0";
+                reg = <0x11000 0x1000>;
+                interrupt-parent = <&plic>;
+                interrupts = <2>;
+        };
+
         spiA: spi@20000 {
             compatible = "spinal-lib,spi-1.0";
             #address-cells = <1>;
@@ -87,13 +94,29 @@
             rsp_fifo_depth = <256>;
             cs-gpios = <0>;
 
-                   
-
             mmc-slot@0 {
                 compatible = "mmc-spi-slot";
                 reg = <0>;
                 voltage-ranges = <3300 3300>;
                 spi-max-frequency = <10000000>;
+            };
+        };
+
+        spiB: spi@21000 {
+            compatible = "spinal-lib,spi-1.0";
+            #address-cells = <1>;
+            #size-cells = <0>;
+            reg = <0x021000 0x1000>;
+            cmd_fifo_depth = <256>;
+            rsp_fifo_depth = <256>;
+            cs-gpios = <&gpioA 15 0>;
+
+            enc28j60: ethernet@0 {
+                compatible = "microchip,enc28j60";
+                reg = <0>;
+                interrupt-parent = <&gpioA>;
+                interrupts = <1 2>; //IRQ_TYPE_EDGE_FALLING
+                spi-max-frequency = <2000000>;
             };
         };
     };
