@@ -13,11 +13,12 @@
     model = "spinal,vexriscv_sim";
 
     chosen {
-        bootargs = "rootwait console=hvc0 root=/dev/mmcblk0p2 init=/sbin/init"; // loglevel=7
-        #linux,initrd-start = <0x80C00000>;
-        #linux,initrd-end =   <0x81400000>; 
-    };
+        bootargs = "rootwait console=hvc0 root=/dev/mmcblk0p2 init=/sbin/init"; 
 
+        //bootargs = "rootwait console=hvc0 root=/dev/ram0 init=/sbin/init loglevel=7"; 
+        //linux,initrd-start = <0x80C00000>;
+        //linux,initrd-end =   <0x81400000>; 
+    };
 
     cpus {
         #address-cells = <0x1>;
@@ -90,10 +91,33 @@
             /*cs-gpios = <&gpioA 15 0>;*/
 
                    
+	        flash: flash@0 {
+		        #address-cells = <1>;
+		        #size-cells = <1>;
+		        compatible = "spi-nor";
+		        reg = <0>;
+		        spi-max-frequency = <25000000>;
 
-            mmc-slot@0 {
+	            partition@0 {
+	                label = "fpga_bitstream";
+	                reg = <0x000000 0x400000>;
+	            };
+	            parition@1 {
+	                label = "machineModeSbi";
+	                reg = <0x400000 0x010000>;
+	            };
+	            parition@2 {
+	                label = "uboot";
+	                reg = <0x410000 0x070000>;
+	            };
+	            parition@3 {
+	                label = "user";
+	                reg = <0x480000 0xB80000>;
+	            };
+	        };
+            mmc-slot@1 {
                 compatible = "mmc-spi-slot";
-                reg = <0>;
+                reg = <1>;
                 voltage-ranges = <3300 3300>;
                 spi-max-frequency = <10000000>;
             };
