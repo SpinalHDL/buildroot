@@ -13,7 +13,7 @@
     model = "spinal,vexriscv_sim";
 
     chosen {
-        bootargs = "rootwait console=hvc0 root=/dev/mmcblk0p1 init=/sbin/init"; // loglevel=7
+        bootargs = "rootwait console=hvc0 root=/dev/mmcblk0p1 init=/sbin/init";
     };
 
 
@@ -118,6 +118,41 @@
                 interrupts = <1 2>; //IRQ_TYPE_EDGE_FALLING
                 spi-max-frequency = <2000000>;
             };
+        };
+
+        spiC: spi@22000 {
+            compatible = "spinal-lib,spi-1.0";
+            #address-cells = <1>;
+            #size-cells = <0>;   
+            reg = <0x022000 0x1000>;
+            cmd_fifo_depth = <256>;
+            rsp_fifo_depth = <256>;
+            cs-gpios = <&gpioA 14 0>;
+
+	    flash: flash@0 {
+	        #address-cells = <1>;
+	        #size-cells = <1>;
+	        compatible = "spi-nor";
+	        reg = <0>;
+	        spi-max-frequency = <25000000>;
+
+                partition@0 {
+                    label = "fpga_bitstream";
+                    reg = <0x000000 0x400000>;
+                };
+                parition@1 {
+                    label = "machineModeSbi";
+                    reg = <0x400000 0x010000>;
+                };
+                parition@2 {
+                    label = "uboot";
+                    reg = <0x410000 0x070000>;
+                };
+                parition@3 {
+                    label = "user";
+	            reg = <0x480000 0xB80000>;
+	        };
+	    };
         };
     };
 };
