@@ -17,7 +17,7 @@
 
         //bootargs = "rootwait console=hvc0 root=/dev/ram0 init=/sbin/init loglevel=7"; 
         //linux,initrd-start = <0x80C00000>;
-        //linux,initrd-end =   <0x81400000>; 
+        //linux,initrd-end =   <0x81E00000>; 
     };
 
     cpus {
@@ -88,8 +88,7 @@
             reg = <0x020000 0x1000>;
             cmd_fifo_depth = <256>;
             rsp_fifo_depth = <256>;
-            /*cs-gpios = <&gpioA 15 0>;*/
-
+            cs-gpios = <0>, <0>, <&gpioA 8 0>, <&gpioA 9 0>;
                    
 	        flash: flash@0 {
 		        #address-cells = <1>;
@@ -115,12 +114,32 @@
 	                reg = <0x480000 0xB80000>;
 	            };
 	        };
+
             mmc-slot@1 {
                 compatible = "mmc-spi-slot";
                 reg = <1>;
                 voltage-ranges = <3300 3300>;
-                spi-max-frequency = <10000000>;
+                spi-max-frequency = <25000000>;
             };
+
+
+            enc28j60: ethernet@2 {
+                compatible = "microchip,enc28j60";
+                reg = <2>;
+                interrupt-parent = <&gpioA>;
+                interrupts = <0 2>; //IRQ_TYPE_EDGE_FALLING
+                spi-max-frequency = <20000000>;
+            };   
+
+
+            /*w5500@3 {
+                compatible = "wiznet,w5500";
+                reg = <3>; 
+                interrupt-parent = <&gpioA>; 
+                interrupts = <1 2>; 
+                spi-max-frequency = <10000000>;
+            };*/
+
         };
     };
 };
