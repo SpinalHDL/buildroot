@@ -54,6 +54,19 @@
 		};
 	};
 
+	clocks {
+		compatible = "simple-bus";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		apbA_clock: clock@1 {
+			compatible = "fixed-clock";
+			reg = <1 0>;
+			#clock-cells = <0>;
+			clock-frequency = <100000000>;
+		};
+	};
+
     apbA@10000000 {
         compatible = "simple-bus";
         #address-cells = <0x1>;
@@ -88,6 +101,7 @@
             reg = <0x020000 0x1000>;
             cmd_fifo_depth = <256>;
             rsp_fifo_depth = <256>;
+            clocks = <&apbA_clock 0>;
             cs-gpios = <0>, <0>, <&gpioA 8 0>, <&gpioA 9 0>;
                    
 	        flash: flash@0 {
