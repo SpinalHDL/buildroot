@@ -91,11 +91,12 @@
 	        #interrupt-cells = <2>;
         };
 
-        uartB: tty@11000 {
+        uartB: ttySpinal@11000 {
                 compatible = "spinal-lib,uart-1.0";
                 reg = <0x11000 0x1000>;
-                interrupt-parent = <&plic>;
-                interrupts = <2>;
+                clocks = <&apbA_clock 0>;
+                //interrupt-parent = <&plic>;
+                //interrupts = <2>;
         };
 
         spiA: spi@20000 {
