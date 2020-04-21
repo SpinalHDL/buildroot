@@ -1,1 +1,2 @@
 LINUX_OVERRIDE_SRCDIR = ../linux
+BR_NO_CHECK_HASH_FOR+=linux-5.0.9.tar.xz
