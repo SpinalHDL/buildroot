@@ -8,7 +8,7 @@
 
 
 	chosen {
-		bootargs = "mem=128M@0xC0000000 rootwait console=hvc0 root=/dev/ram0 init=/sbin/init";
+		bootargs = "mem=128M@0xC0000000 rootwait console=hvc0 earlycon=sbi root=/dev/ram0 init=/sbin/init";
 		linux,initrd-start = <0xC2000000>;
 		linux,initrd-end = <0xC2800000>; // max 8MB ramdisk image
 	};
