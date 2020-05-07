@@ -30,7 +30,7 @@
                 compatible = "riscv,cpu-intc";
             };
         };
-
+/*
         cpu@1 {
             device_type = "cpu";
             compatible = "riscv";
@@ -71,7 +71,7 @@
                 interrupt-controller;
                 compatible = "riscv,cpu-intc";
             };
-        };
+        };*/
 	};
 
 	memory@c0000000 {
