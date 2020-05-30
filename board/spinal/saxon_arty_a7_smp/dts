@@ -37,6 +37,19 @@
                 compatible = "riscv,cpu-intc";
             };
         };
+        cpu@1 {
+            device_type = "cpu";
+            compatible = "riscv";
+            riscv,isa = "rv32ima";
+            mmu-type = "riscv,sv32";
+            reg = <1>;
+            status = "okay";
+            L2: interrupt-controller {
+                #interrupt-cells = <0x00000001>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
     };
 
     memory@80000000 {
