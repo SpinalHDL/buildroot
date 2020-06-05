@@ -15,9 +15,10 @@
     chosen {
         //bootargs = "rootwait console=hvc0  earlycon=sbi root=/dev/mmcblk0p2 init=/sbin/init"; 
 
-        bootargs = "rootwait console=hvc0 earlycon=sbi root=/dev/ram0 init=/sbin/init loglevel=7"; 
-        linux,initrd-start = <0x81000000>;
-        linux,initrd-end =   <0x82000000>; 
+        bootargs = "rootwait console=hvc0 earlycon=sbi root=/dev/ram0 init=/sbin/init mmc_core.use_spi_crc=0"; 
+        //not necessary if uboot is used
+        //linux,initrd-start = <0x81000000>;
+        //linux,initrd-end =   <0x82000000>; 
     };
 
     cpus {
@@ -31,7 +32,7 @@
             mmu-type = "riscv,sv32";
             reg = <0>;
             status = "okay";
-            L1: interrupt-controller {
+            L0: interrupt-controller {
                 #interrupt-cells = <0x00000001>;
                 interrupt-controller;
                 compatible = "riscv,cpu-intc";
@@ -44,26 +45,58 @@
             mmu-type = "riscv,sv32";
             reg = <1>;
             status = "okay";
+            L1: interrupt-controller {
+                #interrupt-cells = <0x00000001>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };
+/*
+        cpu@2 {
+            device_type = "cpu";
+            compatible = "riscv";
+            riscv,isa = "rv32ima";
+            mmu-type = "riscv,sv32";
+            reg = <2>;
+            status = "okay";
             L2: interrupt-controller {
                 #interrupt-cells = <0x00000001>;
                 interrupt-controller;
                 compatible = "riscv,cpu-intc";
             };
         };
+
+        cpu@3 {
+            device_type = "cpu";
+            compatible = "riscv";
+            riscv,isa = "rv32ima";
+            mmu-type = "riscv,sv32";
+            reg = <3>;
+            status = "okay";
+            L3: interrupt-controller {
+                #interrupt-cells = <0x00000001>;
+                interrupt-controller;
+                compatible = "riscv,cpu-intc";
+            };
+        };*/
     };
+
+
 
     memory@80000000 {
         device_type = "memory";
         reg = <0x80000000 0x04000000>;
     };
 
+
+
 	reserved-memory {
 		#address-cells = <1>;
 		#size-cells = <1>;
 		ranges;
 
-		opensbi: sbi@80000000 {
-			reg = <0x80000000 0x100000>;
+		opensbi: sbi@80F80000 {
+			reg = <0x80F80000 0x80000>;
 		};
 	};
 
@@ -81,7 +114,7 @@
 	};
 
 
-/*
+
     apbA@10000000 {
         compatible = "simple-bus";
         #address-cells = <0x1>;
@@ -92,7 +125,9 @@
             compatible = "sifive,plic-1.0.0", "sifive,fu540-c000-plic";
             #interrupt-cells = <1>;
             interrupt-controller;
-            interrupts-extended = <&L1 11 &L1 9>;
+            interrupts-extended = <
+                &L0 11 &L0 9
+                &L1 11 &L1 9>;
             reg = <0x00C00000 0x400000>;
             riscv,ndev = <32>;
         };
@@ -159,7 +194,7 @@
                 interrupts = <0 2>; //IRQ_TYPE_EDGE_FALLING
                 spi-max-frequency = <20000000>;
             };   
-
+/*
 
             w5500@3 {
                 compatible = "wiznet,w5500";
@@ -167,10 +202,10 @@
                 interrupt-parent = <&gpioA>; 
                 interrupts = <1 2>; 
                 spi-max-frequency = <10000000>;
-            };
+            };*/
 
         };
-    };*/
+    };
 };
 
 
