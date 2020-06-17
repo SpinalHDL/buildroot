@@ -147,6 +147,8 @@
 		mac0: mac@40000 {
 			compatible = "spinal,lib_mac";
 			reg = <0x40000 0x1000>;
+			interrupt-parent = <&plic>;
+			interrupts = <3>;
 		};
 
         spiA: spi@20000 {
