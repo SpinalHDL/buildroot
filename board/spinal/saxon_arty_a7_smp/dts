@@ -51,7 +51,7 @@
                 compatible = "riscv,cpu-intc";
             };
         };
-/*
+
         cpu@2 {
             device_type = "cpu";
             compatible = "riscv";
@@ -78,7 +78,7 @@
                 interrupt-controller;
                 compatible = "riscv,cpu-intc";
             };
-        };*/
+        };
     };
 
 
@@ -127,7 +127,9 @@
             interrupt-controller;
             interrupts-extended = <
                 &L0 11 &L0 9
-                &L1 11 &L1 9>;
+                &L1 11 &L1 9
+                &L2 11 &L2 9
+                &L3 11 &L3 9>;
             reg = <0x00C00000 0x400000>;
             riscv,ndev = <32>;
         };
@@ -135,7 +137,7 @@
         gpioA: gpio@0 {
 	        compatible = "spinal-lib,gpio-1.0";
 	        interrupt-parent = <&plic>;
-	        ngpio = <16>;
+	        ngpio = <32>;
 	        interrupts = <4 5 6 7>;
 	        reg = <0x000000 0x1000>;
 	        gpio-controller;
@@ -149,6 +151,7 @@
 			reg = <0x40000 0x1000>;
 			interrupt-parent = <&plic>;
 			interrupts = <3>;
+			mac-address = [00 01 23 34 56 78];
 		};
 
         spiA: spi@20000 {
@@ -193,26 +196,96 @@
                 spi-max-frequency = <25000000>;
             };
 
-
-            enc28j60: ethernet@2 {
-                compatible = "microchip,enc28j60";
-                reg = <2>;
-                interrupt-parent = <&gpioA>;
-                interrupts = <0 2>; //IRQ_TYPE_EDGE_FALLING
-                spi-max-frequency = <20000000>;
-            };   
-/*
-
-            w5500@3 {
-                compatible = "wiznet,w5500";
-                reg = <3>; 
-                interrupt-parent = <&gpioA>; 
-                interrupts = <1 2>; 
-                spi-max-frequency = <10000000>;
-            };*/
-
         };
     };
+
+	leds: leds {
+		compatible = "gpio-leds";
+
+
+		led0_b {
+			label = "led0_b";
+			gpios = <&gpioA 12 0>;
+			linux,default-trigger = "none";
+		};
+		led0_g {
+			label = "led0_g";
+			gpios = <&gpioA 13 0>;
+			linux,default-trigger = "none";
+		};
+		led0_r {
+			label = "led0_r";
+			gpios = <&gpioA 14 0>;
+			linux,default-trigger = "none";
+		};
+		led1_b {
+			label = "led1_b";
+			gpios = <&gpioA 15 0>;
+			linux,default-trigger = "none";
+		};
+		led1_g {
+			label = "led1_g";
+			gpios = <&gpioA 16 0>;
+			linux,default-trigger = "none";
+		};
+		led1_r {
+			label = "led1_r";
+			gpios = <&gpioA 17 0>;
+			linux,default-trigger = "none";
+		};
+		led2_b {
+			label = "led2_b";
+			gpios = <&gpioA 18 0>;
+			linux,default-trigger = "none";
+		};
+		led2_g {
+			label = "led2_g";
+			gpios = <&gpioA 19 0>;
+			linux,default-trigger = "none";
+		};
+		led2_r {
+			label = "led2_r";
+			gpios = <&gpioA 20 0>;
+			linux,default-trigger = "none";
+		};
+		led3_b {
+			label = "led3_b";
+			gpios = <&gpioA 21 0>;
+			linux,default-trigger = "none";
+		};
+		led3_g {
+			label = "led3_g";
+			gpios = <&gpioA 22 0>;
+			linux,default-trigger = "none";
+		};
+		led3_r {
+			label = "led3_r";
+			gpios = <&gpioA 23 0>;
+			linux,default-trigger = "none";
+		};
+
+
+		led4 {
+			label = "led4";
+			gpios = <&gpioA 8 0>;
+			linux,default-trigger = "none";
+		};
+		led5 {
+			label = "led5";
+			gpios = <&gpioA 9 0>;
+			linux,default-trigger = "none";
+		};
+		led6 {
+			label = "led6";
+			gpios = <&gpioA 10 0>;
+			linux,default-trigger = "none";
+		};
+		led7 {
+			label = "led7";
+			gpios = <&gpioA 11 0>;
+			linux,default-trigger = "mmc0";
+		};
+	};
 };
 
 
