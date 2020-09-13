@@ -49,7 +49,19 @@
 		opensbi: sbi@80F80000 {
 			reg = <0x80F80000 0x80000>;
 		};
+		framebuffer: sbi@80E00000 {
+			reg = <0x80E00000 0x100000>;
+		};
 	};
+
+    framebuffer0: framebuffer@80E00000 {
+	    compatible = "simple-framebuffer";
+	    reg = <0x80E00000 (640 * 480 * 2)>;
+	    width = <640>;
+	    height = <480>;
+	    stride = <(640 * 2)>;
+	    format = "r5g6b5";
+    };
 
 	clocks {
 		compatible = "simple-bus";
