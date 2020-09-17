@@ -20,7 +20,7 @@
     cpus {
         #address-cells = <0x1>;
         #size-cells = <0x0>;
-        timebase-frequency = <50000000>;
+        timebase-frequency = <52000000>;
             cpu@0 {
                 device_type = "cpu";
                 compatible = "riscv";
@@ -72,7 +72,7 @@
 			compatible = "fixed-clock";
 			reg = <1 0>;
 			#clock-cells = <0>;
-			clock-frequency = <50000000>;
+			clock-frequency = <52000000>;
 		};
 	};
 
@@ -102,6 +102,38 @@
 	        interrupt-controller;
 	        #interrupt-cells = <2>;
         };
+
+        dmaA: dma@80000 {
+            compatible = "spinal,lib-dmasg";
+            reg = <0x80000 0x10000>;
+            interrupt-parent = <&plic>;
+            interrupts = <12>;
+
+			#dma-cells = <1>;
+            #address-cells = <1>;
+            #size-cells = <0>;   
+            dma-channel@0 {
+	            reg = <0>;
+			    interrupt-parent = <&plic>;
+			    interrupts = <12>;
+            };
+            dma-channel@1 {
+	            reg = <1>;
+			    interrupt-parent = <&plic>;
+			    interrupts = <13>;
+            };
+        };
+
+        audio_out0: audio_out@94000 {
+            compatible = "spinal,lib-audio-out";
+            reg = <0x94000 0x1000>;
+
+            dmas = <&dmaA 0>, <&dmaA 1>;
+            dma-names = "rx", "tx";
+
+            clocks = <&apbA_clock 0>;
+        };
+
 
         uartB: ttySpinal@11000 {
                 compatible = "spinal-lib,uart-1.0";
