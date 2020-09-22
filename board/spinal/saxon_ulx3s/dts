@@ -1,8 +1,9 @@
 
 
 /dts-v1/;
-//include/ "dt-bindings/interrupt-controller/irq.h"
-//include/ "dt-bindings/gpio/gpio.h"
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/interrupt-controller/irq.h>
 
 
 
@@ -139,7 +140,7 @@
         gpioA: gpio@0 {
 	        compatible = "spinal-lib,gpio-1.0";
 	        interrupt-parent = <&plic>;
-	        ngpio = <24>;
+	        ngpio = <32>;
 	        interrupts = <0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4>;
 	        reg = <0x000000 0x1000>;
 	        gpio-controller;
@@ -233,6 +234,15 @@
                 spi-max-frequency = <2000000>;
             };
         };
+    };
+
+    i2cA: i2cA {
+        compatible = "i2c-gpio";
+        sda-gpios = <&gpioA 24 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+        scl-gpios = <&gpioA 25 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
+        i2c-gpio,delay-us = <3>;	
+        #address-cells = <1>;
+        #size-cells = <0>;
     };
 };
 
