@@ -197,7 +197,7 @@
             clocks = <&apbA_clock 0>;
             cmd_fifo_depth = <256>;
             rsp_fifo_depth = <256>;
-            cs-gpios = <0>, <0>, <&gpioA 14 0>;
+            cs-gpios = <0>, <0>, <0>, <&gpioA 14 0>;
 
 	        flash: flash@0 {
 	            #address-cells = <1>;
@@ -226,9 +226,15 @@
                 spi-max-frequency = <25000000>;
             };
 
-            enc28j60: ethernet@2 {
-                compatible = "microchip,enc28j60";
+            spidev@2{
+                compatible = "spidev";
+                spi-max-frequency = <25000000>;
                 reg = <2>;
+            };
+
+            enc28j60: ethernet@3 {
+                compatible = "microchip,enc28j60";
+                reg = <3>;
                 interrupt-parent = <&gpioA>;
                 interrupts = <15 2>; //IRQ_TYPE_EDGE_FALLING
                 spi-max-frequency = <2000000>;
