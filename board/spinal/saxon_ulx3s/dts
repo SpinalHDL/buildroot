@@ -6,6 +6,17 @@
 #include <dt-bindings/interrupt-controller/irq.h>
 
 
+#if (CPU_COUNT + 0)
+#if CPU_COUNT < 1 || CPU_COUNT > 4
+#error CPU_COUNT out of range
+#endif
+#else
+#error CPU_COUNT need to be defined for the DTS generation
+#endif
+
+
+
+
 
 / {
     #address-cells = <0x1>;
@@ -35,7 +46,9 @@
                 compatible = "riscv,cpu-intc";
             };
         };
-        /*cpu@1 {
+
+        #if CPU_COUNT >= 2
+        cpu@1 {
             device_type = "cpu";
             compatible = "riscv";
             riscv,isa = "rv32ima";
@@ -48,7 +61,9 @@
                 compatible = "riscv,cpu-intc";
             };
         };
+        #endif
 
+        #if CPU_COUNT >= 3
         cpu@2 {
             device_type = "cpu";
             compatible = "riscv";
@@ -62,7 +77,9 @@
                 compatible = "riscv,cpu-intc";
             };
         };
+        #endif
 
+        #if CPU_COUNT >= 4
         cpu@3 {
             device_type = "cpu";
             compatible = "riscv";
@@ -75,7 +92,8 @@
                 interrupt-controller;
                 compatible = "riscv,cpu-intc";
             };
-        };*/
+        };
+        #endif
     };
 
     memory@80000000 {
@@ -83,40 +101,40 @@
         reg = <0x80000000 0x02000000>;
     };
 
-	reserved-memory {
-		#address-cells = <1>;
-		#size-cells = <1>;
-		ranges;
+    reserved-memory {
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges;
 
-		opensbi: sbi@80F80000 {
-			reg = <0x80F80000 0x80000>;
-		};
-		framebuffer: sbi@80E00000 {
-			reg = <0x80E00000 0x100000>;
-		};
-	};
-
-    framebuffer0: framebuffer@80E00000 {
-	    compatible = "simple-framebuffer";
-	    reg = <0x80E00000 (640 * 480 * 2)>;
-	    width = <640>;
-	    height = <480>;
-	    stride = <(640 * 2)>;
-	    format = "r5g6b5";
+        opensbi: sbi@80F80000 {
+            reg = <0x80F80000 0x80000>;
+        };
+        framebuffer: sbi@80E00000 {
+            reg = <0x80E00000 0x100000>;
+        };
     };
 
-	clocks {
-		compatible = "simple-bus";
-		#address-cells = <1>;
-		#size-cells = <0>;
+    framebuffer0: framebuffer@80E00000 {
+        compatible = "simple-framebuffer";
+        reg = <0x80E00000 (640 * 480 * 2)>;
+        width = <640>;
+        height = <480>;
+        stride = <(640 * 2)>;
+        format = "r5g6b5";
+    };
 
-		apbA_clock: clock@1 {
-			compatible = "fixed-clock";
-			reg = <1 0>;
-			#clock-cells = <0>;
-			clock-frequency = <52000000>;
-		};
-	};
+    clocks {
+        compatible = "simple-bus";
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        apbA_clock: clock@1 {
+            compatible = "fixed-clock";
+            reg = <1 0>;
+            #clock-cells = <0>;
+            clock-frequency = <52000000>;
+        };
+    };
 
     apbA@10000000 {
         compatible = "simple-bus";
@@ -130,23 +148,34 @@
             interrupt-controller;
             interrupts-extended = <
                 &L0 11 &L0 9
-                /*&L1 11 &L1 9
+
+                #if CPU_COUNT >= 2
+                &L1 11 &L1 9
+                #endif
+
+                #if CPU_COUNT >= 3
                 &L2 11 &L2 9
-                &L3 11 &L3 9*/>;
+                #endif
+
+                #if CPU_COUNT >= 4
+                &L3 11 &L3 9
+                #endif
+            >;
+
             reg = <0x00C00000 0x400000>;
             riscv,ndev = <32>;
         };
 
         gpioA: gpio@0 {
-	        compatible = "spinal-lib,gpio-1.0";
-	        interrupt-parent = <&plic>;
-	        ngpio = <32>;
-	        interrupts = <0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4>;
-	        reg = <0x000000 0x1000>;
-	        gpio-controller;
-	        #gpio-cells = <2>;
-	        interrupt-controller;
-	        #interrupt-cells = <2>;
+            compatible = "spinal-lib,gpio-1.0";
+            interrupt-parent = <&plic>;
+            ngpio = <32>;
+            interrupts = <0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4>;
+            reg = <0x000000 0x1000>;
+            gpio-controller;
+            #gpio-cells = <2>;
+            interrupt-controller;
+            #interrupt-cells = <2>;
         };
 
         dmaA: dma@80000 {
@@ -155,18 +184,18 @@
             interrupt-parent = <&plic>;
             interrupts = <12>;
 
-			#dma-cells = <1>;
+            #dma-cells = <1>;
             #address-cells = <1>;
             #size-cells = <0>;   
             dma-channel@0 {
-	            reg = <0>;
-			    interrupt-parent = <&plic>;
-			    interrupts = <12>;
+                reg = <0>;
+                interrupt-parent = <&plic>;
+                interrupts = <12>;
             };
             dma-channel@1 {
-	            reg = <1>;
-			    interrupt-parent = <&plic>;
-			    interrupts = <13>;
+                reg = <1>;
+                interrupt-parent = <&plic>;
+                interrupts = <13>;
             };
         };
 
@@ -207,25 +236,25 @@
             rsp_fifo_depth = <256>;
             cs-gpios = <0>, <0>, <0>, <&gpioA 14 0>;
 
-	        flash: flash@0 {
-	            #address-cells = <1>;
-	            #size-cells = <1>;
-	            compatible = "spi-nor";
-	            reg = <0>;
-	            spi-max-frequency = <10000000>;
-	            partition@0 {
-	                label = "fpga_bitstream";
-	                reg = <0x000000 0x400000>;
-	            };
-	            partition@1 {
-	                label = "opensbi";
-	                reg = <0x340000 0x040000>;
-	            };
-	            partition@2 {
-	                label = "uboot";
-	                reg = <0x380000 0x080000>;
-	            };
-	        };
+            flash: flash@0 {
+                #address-cells = <1>;
+                #size-cells = <1>;
+                compatible = "spi-nor";
+                reg = <0>;
+                spi-max-frequency = <10000000>;
+                partition@0 {
+                    label = "fpga_bitstream";
+                    reg = <0x000000 0x400000>;
+                };
+                partition@1 {
+                    label = "opensbi";
+                    reg = <0x340000 0x040000>;
+                };
+                partition@2 {
+                    label = "uboot";
+                    reg = <0x380000 0x080000>;
+                };
+            };
 
             mmc-slot@1 {
                 compatible = "mmc-spi-slot";
@@ -254,7 +283,7 @@
         compatible = "i2c-gpio";
         sda-gpios = <&gpioA 24 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
         scl-gpios = <&gpioA 25 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
-        i2c-gpio,delay-us = <3>;	
+        i2c-gpio,delay-us = <3>;    
         #address-cells = <1>;
         #size-cells = <0>;
     };
