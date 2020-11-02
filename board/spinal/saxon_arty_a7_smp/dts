@@ -148,7 +148,7 @@
             compatible = "spinal-lib,gpio-1.0";
             interrupt-parent = <&plic>;
             ngpio = <32>;
-            interrupts = <4 5 6 7>;
+            interrupts = <0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4 5 6 7>;
             reg = <0x000000 0x1000>;
             gpio-controller;
             #gpio-cells = <2>;
@@ -204,7 +204,7 @@
             cmd_fifo_depth = <256>;
             rsp_fifo_depth = <256>;
             clocks = <&apbA_clock 0>;
-            cs-gpios = <0>, <0>, <&gpioA 8 0>, <&gpioA 9 0>;
+            cs-gpios = <0>, <0>, <&gpioA 28 0>, <&gpioA 29 0>;
                    
             flash: flash@0 {
                 #address-cells = <1>;
@@ -329,7 +329,7 @@
         };
     };
 
-
+/*
     i2cA: i2cA {
         compatible = "i2c-gpio";
         sda-gpios = <&gpioA 24 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
@@ -337,7 +337,7 @@
         i2c-gpio,delay-us = <3>;	
         #address-cells = <1>;
         #size-cells = <0>;
-    };
+    };*/
 };
 
 
